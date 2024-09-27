@@ -3,42 +3,38 @@ import { Row, Col, Table, Container } from 'react-bootstrap';
 import RobotDetail from './RobotDetail';
 import PageTitle from './PageTitle';
 import Banner from './Banner';
+import Footer from './Footer';
+import { useTranslation } from 'react-i18next';
 
 const RobotList = () => {
   const [robots, setRobots] = useState([]);
   const [selectedRobotId, setSelectedRobotId] = useState(null);
+  const { t } = useTranslation();
 
-  // Obtener la lista de robots al cargar el componente
   useEffect(() => {
     fetch('http://localhost:3001/robots')
       .then((response) => response.json())
       .then((data) => setRobots(data));
   }, []);
 
-  // Manejar la selección de un robot
   const handleRobotClick = (id) => {
-    setSelectedRobotId(id); // Actualizar el robot seleccionado
+    setSelectedRobotId(id);
   };
 
   return (
-    <Container>
-      {/* Título de la página */}
-      <PageTitle title="Adopta un Robot con Robot Lovers!" style={{ fontSize: '28px' }} />
+    <Container style={{width: '900px' }}>
+      <PageTitle title={t("Robot Adoption")} style={{ fontSize: '28px' }} />
+      <Banner imageSrc="/image_banner.png" style={{ marginBottom: '28px' }} />
 
-      {/* Imagen superior (Banner) centrada */}
-      <Banner imageSrc="/image_banner.png" style={{width: '700px', marginBottom: '20px', justifyContent:'center'}} />
-
-      {/* Layout para mostrar el listado y el detalle en la misma vista */}
       <Row style={{ marginTop: '30px' }}>
-        {/* Columna para el listado de robots */}
         <Col md={6}>
           <Table striped bordered hover>
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Nombre</th>
-                <th>Modelo</th>
-                <th>Empresa Fabricante</th>
+                <th>{t("Name")}</th>
+                <th>{t("Model")}</th>
+                <th>{t("Manufacturer")}</th>
               </tr>
             </thead>
             <tbody>
@@ -54,17 +50,17 @@ const RobotList = () => {
           </Table>
         </Col>
 
-        {/* Columna para mostrar el detalle del robot seleccionado */}
         <Col md={6}>
           {selectedRobotId ? (
             <RobotDetail id={selectedRobotId} />
           ) : (
             <div style={{ textAlign: 'center' }}>
-              <h4>Selecciona un robot para ver el detalle</h4>
+              <h4>{t("Select a robot to view details")}</h4>
             </div>
           )}
         </Col>
       </Row>
+      <Footer />
     </Container>
   );
 };
